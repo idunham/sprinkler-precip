@@ -1,0 +1,92 @@
+The intent is to create a graphic showing precipitation in a given area,
+when a sprinkler with a given profile is used in a given density/spacing.
+
+Profile: 
+This will be a table of distance vs depth of precipitation/hr (depth).
+Linear interpolation will be used for v1.
+The final depth should be ~ 0.
+
+(Ideally, a regression would be used)
+
+Spacing:
+First things first.  
+Version 1 will assume a *square* grid of Width x Length.
+Ultimately, we want width, length, & stagger.
+
+We'll also need frequency!
+
+
+Layers:
+The bare minimum is lay out a square, 1 sprinkler/corner, and interpolate depth.
+
+Theory:
+
+Prepare:
+	Get profile (CSV?)
+	Get spacing, frequency
+
+FillCell(x,y):
+	radius=sqrt(x^2 + y^2)
+	check profile for sample
+	If match, return depth 
+	Else if radius>=MaxDistance return 0
+	Else # none matching
+		look up lower & upper bound
+		delta=(radius-lower)/(upper-lower)
+		return delta*(depth.lower-depth.upper) + depth.lower
+	Endif
+
+GraphSprinkler:
+	# Min{X,Y} =-MaxDistance
+	# Max{X,Y} = MaxDistance
+	2-D array of (2 x MaxDistance)^2
+	Initialize.
+	Plot one axis.
+	For each cell in array,
+		FillCell(x,y)
+
+AddSprinkler(x,y,SprinklerGraph,MainGraph):
+	For cell in SprinklerGraph,
+		depth.MainGraph[cell.x+x][cell.y+y] += depth.cell
+
+LayoutSprinklers:
+	Plot MainGraph is 4*MaxDistance ^2
+	(Center square of 2*MaxDistance will be used, but we need neighbors)
+	Let X=MaxDistance
+	If Space < MaxDistance
+		while X < 0
+			X = X - Space
+	Endif
+	Y=X
+	# Assume square layout
+	For X < (4*MaxDistance - Space)
+		For Y < (4*MaxDistance -Space)
+			AddSprinkler(X,Y)
+
+NormalizeGraph:
+	MaxDepth=getmax.MainGraph
+	for cell in range.MainGraph(MaxDistance,3*MaxDistance,MaxDistance,3*MaxDistance)
+		LastGraph[cell.x-MaxDistance][cell.y-MaxDistance]=rint(254*cell.depth/MaxDepth)
+	
+Breadth=string(MaxDistance*2)
+printf("P5\n%s %s \n 255\n%s", Breadth, Breadth, stringdump(LastGraph))
+
+
+
+Y
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
++  * Reference position
+|
++--+--------------------X
+
+
