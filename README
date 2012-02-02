@@ -1,0 +1,44 @@
+		Sprinkler Precipitation Modeler
+Copyright (C) 2012 Isaac Dunham
+
+Currently, there is one program that will take data on sprinkler 
+precipitation and generate a graphical model of precipitation, 
+given a specified sprinkler spacing.
+The aforesaid program (SPACE/Hyper-SPACE/SPACE-Pro from Fresno State) 
+is closed-source, available by purchase only, and also only supports 
+Windows.  
+
+Since I use Debian GNU/Linux, I want a *nix-compatible program; as a 
+university student aiming for employment outside academia, I want gratis 
+software; as a tinkerer who always wants to understand stuff, I want libre
+software.  Additionally, I understand the advantages of FOSS in terms of
+practical utility.
+
+I hope to implement a free replacement for SPACE.  
+It will probably get written in Python + NumPy, because it seems easy to me,
+I understand Python better than anything else, and because NumPy appears to
+handle the arrays I'll use decently.
+
+ROADMAP
+0.0*:
+-Fill an array with depth data based on hard-coded table
+-Generate array for multiple sprinklers in squares
+0.1*:
+-Input from file: CSV table for sprinkler deposition
+-Output to file/stdout: graphics of multiple sprinklers
+0.2*:
+-Variable file names
+-No data hardcoded
+-Rectangular spacing?
+0.3*:
+-Bugfixes
+-UI changes?
+-Add support for staggered spacing?
+1.0: should have all of above working well
+
+Version 1 may be CLI only; a GUI (if it happens) may be Tkinter.
+
+STATUS
+Pseudocode has been written (see doc/OVERVIEW).
+
+
