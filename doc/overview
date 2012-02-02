@@ -26,6 +26,7 @@ Prepare:
 	Get spacing, frequency
 
 FillCell(x,y):
+# Implemented
 	radius=sqrt(x^2 + y^2)
 	check profile for sample
 	If match, return depth 
@@ -37,6 +38,7 @@ FillCell(x,y):
 	Endif
 
 GraphSprinkler:
+# Implemented
 	# Min{X,Y} =-MaxDistance
 	# Max{X,Y} = MaxDistance
 	2-D array of (2 x MaxDistance)^2
