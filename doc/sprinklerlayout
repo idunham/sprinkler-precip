@@ -1,0 +1,12 @@
+
+ []-[]
+/!  /!
+[]-[]!
+|[]-|]
+[]-[]
+
+Layer 1 (array[x,y,0]) holds vertical components
+Layer 2 (array[x,y,1]) holds horizontal components
+Thus, a point in Main can be addressed as Main[ array[x,y,0], array[x,y,1] ]
+
+For our purposes, X=vertical (-y axis, mathematically speaking), Y=horiz.
