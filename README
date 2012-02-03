@@ -39,6 +39,8 @@ ROADMAP
 Version 1 may be CLI only; a GUI (if it happens) may be Tkinter.
 
 STATUS
-Pseudocode has been written (see doc/OVERVIEW).
+Pseudocode has been written (see doc/overview).
+
+0.01 implemented: fill array representing sprinkler precipitation with hardcoded input data
 
 
