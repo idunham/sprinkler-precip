@@ -20,18 +20,33 @@ SprinklerPrecip=[0,1.4,1.2,1,1,1,.9,.9,.8,.4,0]
 SprinklerSpace=12
 
 def AddArray2D(Target,From,CornerX=0,CornerY=0):
-	# Target currently must be >= From.Breadth +CornerY x From.Height+CornerX
-	pass
 	TgtX=Target.shape[0]
 	TgtY=Target.shape[1]
 	FromX=From.shape[0]
 	FromY=From.shape[1]
 	TMinX=int(CornerX)
 	TMinY=int(CornerY)
-	TMaxX=TgtX - (TMinX+FromX)
-	TMaxY=TgtY - (TMinY+FromY)
-	Target[TMinX:TMaxX,TMinY:TMaxY] += From
-
+	TMaxX=FromX+TMinX
+	TMaxY=FromY+TMinY
+	# We need to get the window for From, also
+	FMinX=0
+	FMinY=0
+	FMaxX=FromX
+	FMaxY=FromY
+	# Fix the edge/corner cases	
+	if TMinX < 0:
+		FMinX -= TMinX
+		TMinX = 0
+	if TMinY < 0:
+		FMinY -= TMinY
+		TMinY = 0
+	if TMaxX > TgtX:
+		FMaxX -= (TMaxX - TgtX)
+		TMaxX = TgtX
+	if TMaxY > TgtY:
+		FMaxY -= (TMaxY - TgtY)
+		TMaxY = TgtY
+	Target[TMinX:TMaxX,TMinY:TMaxY] += From[FMinX:FMaxX,FMinY:FMaxY]
 
 for x in range(0,(MaxDist+1)):
 	for y in range(0,(MaxDist+1)):
@@ -68,17 +83,23 @@ for x in range(0,(MaxDist+1)):
 CurrX = int(MaxDist + 1 - SprinklerSpace*(math.floor( (MaxDist+1)/SprinklerSpace) ))
 SprinklerNum=int( math.ceil( (4 * MaxDist + 1 - CurrX)/SprinklerSpace ) )
 
-SprinklerPos=zeros( (SprinklerNum,SprinklerNum,2), dtype=int )
 # First Sprinkler position: Curr{X,Y}
 # Assuming square layout
 CurrY = CurrX
 # Fill block of sprinkler positions
-X=CurrX
+#
+# Basic theory:
+# Sprinkler.shape=(2*MaxDist+1,2*MaxDist+1)
+# Sprinkler[ceil(Breadth]  is the center.
+# Thus we need
+#
+X = CurrX - int( math.ceil(Sprinkler.shape[0]) )
 for x in range(0,SprinklerNum):
 	Y=CurrY
 	for y in range(0,SprinklerNum):
-		SprinklerPos[x,y,0]=X
-		SprinklerPos[x,y,1]=Y
+		#SprinklerPos[x,y,0]=X
+
+		#SprinklerPos[x,y,1]=Y
 		Y=Y+SprinklerSpace
 	X=X+SprinklerSpace
 
