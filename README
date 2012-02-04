@@ -31,9 +31,10 @@ ROADMAP
 -No data hardcoded
 -Rectangular spacing?
 0.3*:
+-Add PRF support (SPACE sprinkler data)?
 -Bugfixes
 -UI changes?
--Add support for staggered spacing?
+-Add support for staggered/trianagular spacing?
 1.0: should have all of above working well
 
 Version 1 may be CLI only; a GUI (if it happens) may be Tkinter.
@@ -43,4 +44,4 @@ Pseudocode has been written (see doc/overview).
 
 0.01 implemented: fill array representing sprinkler precipitation with hardcoded input data
 
-
+0.02 implemented: adding arrays works.
