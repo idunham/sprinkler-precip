@@ -11,6 +11,7 @@
 ##############################################################
 
 from numpy import *
+from scipy import interpolate
 import math
 import matplotlib.pyplot as plt
 
@@ -61,24 +62,27 @@ def PolInterp(r,SprinklerPrecip,MaxDist=10,freq=1):
 		return 0
 
 
-def MapSprinkler(Sprinkler,SprinklerPrecip):
+def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 	for x in range(0,(MaxDist+1)):
 		for y in range(0,(MaxDist+1)):
 			# We'll allow mapping onto a filled map
 			r=(x**2 + y**2)**.5
-			CellPrecip = PolInterp(r,SprinklerPrecip)
+			CellPrecip = PolInterp(r,SprinklerPrecip,MaxDist,1)
 		 	Sprinkler[(MaxDist-x,MaxDist-y)] += CellPrecip
 			Sprinkler[(MaxDist+x,MaxDist-y)] += CellPrecip
 			Sprinkler[(MaxDist+x,MaxDist+y)] += CellPrecip
 			Sprinkler[(MaxDist-x,MaxDist+y)] += CellPrecip
 
 
-MaxDist=10
 Sprinkler = zeros( ((2*MaxDist+1),(2*MaxDist+1)) )
-SprinklerPrecip=[0,1.4,1.2,1,1,1,.9,.9,.8,.4,0]
-SprinklerSpace=int(8)
 
-MapSprinkler(Sprinkler,SprinklerPrecip)
+SprinklerDist = [0,1,2,3,4,5,6,7,8,9,10]
+SprinklerData = [0,1.4,1.2,1,1,1,.9,.9,.8,.4,0]
+MaxDist       = int(math.ceil(SprinklerDist[SprinklerDist.shape[0]-1]))
+
+SprinklerSpace= int(8)
+
+MapSprinkler(Sprinkler,SprinklerData,MaxDist)
 
 # Now to add the sprinkler maps up correctly...
 AllSprinklers=zeros( (MaxDist * 4 + 1, MaxDist * 4 + 1))
