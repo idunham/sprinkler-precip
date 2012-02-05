@@ -73,23 +73,23 @@ def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 		for y in range(0,(MaxDist+1)):
 			# We'll allow mapping onto a filled map
 			r=(x**2 + y**2)**.5
-			CellPrecip = PolInterp(r,SprinklerPrecip,MaxDist)
+			CellPrecip = Interpolate(r,SprinklerPrecip,MaxDist)
 		 	Sprinkler[(MaxDist-x,MaxDist-y)] += CellPrecip
 			Sprinkler[(MaxDist+x,MaxDist-y)] += CellPrecip
 			Sprinkler[(MaxDist+x,MaxDist+y)] += CellPrecip
 			Sprinkler[(MaxDist-x,MaxDist+y)] += CellPrecip
 
 
-Sprinkler = zeros( ((2*MaxDist+1),(2*MaxDist+1)) )
 
-SprinklerDist = [0,1,2,3,4,5,6,7,8,9,10]
-SprinklerData = [0,1.4,1.2,1,1,1,.9,.9,.8,.4,0]
+SprinklerDist = array([0,1,2,3,4,5,6,7,8,9,10])
+SprinklerData = array( [0,1.4,1.2,1,1,1,.9,.9,.8,.4,0])
 MaxDist       = int(math.ceil(SprinklerDist[SprinklerDist.shape[0]-1]))
 
+Sprinkler = zeros( ((2*MaxDist+1),(2*MaxDist+1)) )
 SprinklerSpace= int(8)
 
 SprinklerPrecip=interpolate.splrep(SprinklerDist,SprinklerData)
-MapSprinkler(Sprinkler,SprinklerData,MaxDist)
+MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist)
 
 # Now to add the sprinkler maps up correctly...
 AllSprinklers=zeros( (MaxDist * 4 + 1, MaxDist * 4 + 1))
