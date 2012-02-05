@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 ##############################################################
 # Sprinkler array code...
-# Currently assumes frequency=1 (spacing of catchments)
-# Hardcoded MaxDist (radius of spray area)
-# Uses linear interpolation
 # 
 #
 #
@@ -14,7 +11,7 @@ from numpy import *
 from scipy import interpolate
 import math
 import matplotlib.pyplot as plt
-
+import csv
 
 
 def AddArray2D(Target,From,CornerX=0,CornerY=0):
@@ -67,6 +64,12 @@ def Interpolate(r,SprinklerPrecip,MaxDist=10):
 	else:
 		return 0
 
+def PlotSprinkler(Sprinkler):
+	Plot1=plt.contourf(Sprinkler)
+	plt.colorbar()
+	plt.show()
+
+
 
 def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 	for x in range(0,(MaxDist+1)):
@@ -74,19 +77,29 @@ def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 			# We'll allow mapping onto a filled map
 			r=(x**2 + y**2)**.5
 			CellPrecip = Interpolate(r,SprinklerPrecip,MaxDist)
-		 	Sprinkler[(MaxDist-x,MaxDist-y)] += CellPrecip
-			Sprinkler[(MaxDist+x,MaxDist-y)] += CellPrecip
-			Sprinkler[(MaxDist+x,MaxDist+y)] += CellPrecip
-			Sprinkler[(MaxDist-x,MaxDist+y)] += CellPrecip
+		 	Sprinkler[(MaxDist-x,MaxDist-y)] = CellPrecip
+			Sprinkler[(MaxDist+x,MaxDist-y)] = CellPrecip
+			Sprinkler[(MaxDist+x,MaxDist+y)] = CellPrecip
+			Sprinkler[(MaxDist-x,MaxDist+y)] = CellPrecip
 
 
 
-SprinklerDist = array([0,1,2,3,4,5,6,7,8,9,10])
-SprinklerData = array( [0,1.4,1.2,1,1,1,.9,.9,.8,.4,0])
-MaxDist       = int(math.ceil(SprinklerDist[SprinklerDist.shape[0]-1]))
+#SprinklerDist = array([2,4,6,8,10,12])
+#SprinklerData = array( [0.873,1.137,1.137,.773,.209,0])
+
+datacsv=open('data.csv',"rb")
+dialect = csv.Sniffer().sniff(datacsv.read(1024))
+datacsv.seek(0)
+Data=csv.reader(datacsv,dialect)
+SprinklerDist = array(Data.next())
+SprinklerData = array(Data.next())
+MoreData = array(Data.next())
+datacsv.close()
+
+MaxDist       = int(math.ceil(eval(SprinklerDist[SprinklerDist.shape[0]-1])))
 
 Sprinkler = zeros( ((2*MaxDist+1),(2*MaxDist+1)) )
-SprinklerSpace= int(8)
+SprinklerSpace= int(eval(MoreData[0]))
 
 SprinklerPrecip=interpolate.splrep(SprinklerDist,SprinklerData)
 MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist)
@@ -117,9 +130,5 @@ for x in range(0,SprinklerNum):
 		Y=Y+SprinklerSpace
 	X=X+SprinklerSpace
 
-
-SprinklerPlot=plt.contourf(AllSprinklers[(MaxDist+1):(MaxDist+SprinklerSpace+2),(MaxDist+1):(MaxDist+SprinklerSpace+2)])
-Plot2=plt.contourf(AllSprinklers)
-plt.colorbar()
-plt.show()
+PlotSprinkler(AllSprinklers)
 
