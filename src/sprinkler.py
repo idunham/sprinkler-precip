@@ -45,12 +45,11 @@ def AddArray2D(Target,From,CornerX=0,CornerY=0):
 		TMaxY = TgtY
 	Target[TMinX:TMaxX,TMinY:TMaxY] += From[FMinX:FMaxX,FMinY:FMaxY]
 
-def PolInterp(x,y,SprinklerPrecip,MaxDist=10,freq=1):
+def PolInterp(r,SprinklerPrecip,MaxDist=10,freq=1):
 	# SprinklerPrecip should always be whatever holds precipitation data;
 	# this function was split out to provide a single point of failure
 	# when it gets redefined.
 	# freq is unimplemented, MaxDist should be unneeded
-	r=(x**2 + y**2)**.5
 	if r < MaxDist:		# Don't touch anything otherwise
 		low=math.floor(r)
 		up=math.ceil(r)
@@ -66,7 +65,8 @@ def MapSprinkler(Sprinkler,SprinklerPrecip):
 	for x in range(0,(MaxDist+1)):
 		for y in range(0,(MaxDist+1)):
 			# We'll allow mapping onto a filled map
-			CellPrecip = PolInterp(x,y,SprinklerPrecip)
+			r=(x**2 + y**2)**.5
+			CellPrecip = PolInterp(r,SprinklerPrecip)
 		 	Sprinkler[(MaxDist-x,MaxDist-y)] += CellPrecip
 			Sprinkler[(MaxDist+x,MaxDist-y)] += CellPrecip
 			Sprinkler[(MaxDist+x,MaxDist+y)] += CellPrecip
@@ -95,14 +95,14 @@ SprinklerNum=int( math.ceil( (4 * MaxDist + 1 - CurrX)/SprinklerSpace ) )
 #
 
 X = CurrX - int( math.ceil(Sprinkler.shape[0])/2 )
-print (4 * MaxDist), CurrX, SprinklerSpace, SprinklerNum
+#  print (4 * MaxDist), CurrX, SprinklerSpace, SprinklerNum
 for x in range(0,SprinklerNum):
 	Y = CurrY -  int( math.ceil( Sprinkler.shape[0] )/2 )
 	for y in range(0,SprinklerNum):
 		#  SprinklerPos[x,y,0]=X
 		#  SprinklerPos[x,y,1]=Y
 		AddArray2D(AllSprinklers,Sprinkler,X,Y)
-		print X, Y, x, y
+		#  print X, Y, x, y
 		Y=Y+SprinklerSpace
 	X=X+SprinklerSpace
 
