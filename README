@@ -37,11 +37,18 @@ ROADMAP
 -Add support for staggered/trianagular spacing?
 1.0: should have all of above working well
 
-Version 1 may be CLI only; a GUI (if it happens) may be Tkinter.
-
 STATUS
 Pseudocode has been written (see doc/overview).
 
 0.01 implemented: fill array representing sprinkler precipitation with hardcoded input data
-
 0.02 implemented: adding arrays works.
+
+0.10 implemented: matplotlib used for graphics
+0.10a: bugfixes
+0.11 implemented: scipy interpolation (makes catchment data more flexible)
+0.12 implemented: Use CSV files (currently hardcoded to "data.csv")
+
+TODO:
+0.2x:	Use Tkinter for a file selection dialog
+	Rectangular spacing
+	Staggered spacing?
