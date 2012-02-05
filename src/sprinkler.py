@@ -12,6 +12,7 @@
 
 from numpy import *
 import math
+import matplotlib.pyplot as plt
 
 
 
@@ -75,14 +76,14 @@ def MapSprinkler(Sprinkler,SprinklerPrecip):
 MaxDist=10
 Sprinkler = zeros( ((2*MaxDist+1),(2*MaxDist+1)) )
 SprinklerPrecip=[0,1.4,1.2,1,1,1,.9,.9,.8,.4,0]
-SprinklerSpace=12
+SprinklerSpace=int(8)
 
 MapSprinkler(Sprinkler,SprinklerPrecip)
 
 # Now to add the sprinkler maps up correctly...
 AllSprinklers=zeros( (MaxDist * 4 + 1, MaxDist * 4 + 1))
 
-CurrX = int(MaxDist + 1 - SprinklerSpace*(math.floor( (MaxDist+1)/SprinklerSpace) ))
+CurrX = int(MaxDist + 1 - SprinklerSpace*(math.floor( (MaxDist+1)/SprinklerSpace)/2 ))
 CurrY = CurrX
 SprinklerNum=int( math.ceil( (4 * MaxDist + 1 - CurrX)/SprinklerSpace ) )
 # Fill block of sprinkler positions
@@ -93,16 +94,21 @@ SprinklerNum=int( math.ceil( (4 * MaxDist + 1 - CurrX)/SprinklerSpace ) )
 # We need X & Y = the starting corners.
 #
 
-X = CurrX - int( math.ceil(Sprinkler.shape[0]) )
+X = CurrX - int( math.ceil(Sprinkler.shape[0])/2 )
+print (4 * MaxDist), CurrX, SprinklerSpace, SprinklerNum
 for x in range(0,SprinklerNum):
-	Y = CurrY -  int( math.ceil( Sprinkler.shape[0] ) )
+	Y = CurrY -  int( math.ceil( Sprinkler.shape[0] )/2 )
 	for y in range(0,SprinklerNum):
 		#  SprinklerPos[x,y,0]=X
 		#  SprinklerPos[x,y,1]=Y
 		AddArray2D(AllSprinklers,Sprinkler,X,Y)
+		print X, Y, x, y
 		Y=Y+SprinklerSpace
 	X=X+SprinklerSpace
 
 
-
+SprinklerPlot=plt.contourf(AllSprinklers[(MaxDist+1):(MaxDist+SprinklerSpace+2),(MaxDist+1):(MaxDist+SprinklerSpace+2)])
+Plot2=plt.contourf(AllSprinklers)
+plt.colorbar()
+plt.show()
 
