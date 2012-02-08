@@ -8,12 +8,12 @@
 ##############################################################
 
 from numpy import *
-from scipy import interpolate
-import math
-import matplotlib.pyplot as plt
-import csv
-import tkFileDialog as tkf
 from Tkinter import *
+from scipy import interpolate
+import matplotlib.pyplot as plt
+import tkFileDialog as tkf
+import csv
+import math
 
 
 def AddArray2D(Target,From,CornerX=0,CornerY=0):
@@ -117,29 +117,22 @@ if __name__=='__main__':
 	SprinklerPrecip=interpolate.splrep(SprinklerDist,SprinklerData)
 	MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist)
 
-	# Now to add the sprinkler maps up correctly...
 	AllSprinklers=zeros( (PlotX,PlotY))
-
-	
 	SprinklerNum=int(4)
+
 	# Fill block of sprinkler positions
 	# Basic theory:
 	# Sprinkler.shape=(2*MaxDist+1,2*MaxDist+1)
 	# Sprinkler[ceil(Breadth)]  is the center.
 	# Sprinkler[1,1] is the corner of the data, but we'll use [0,0]
 	# We need X & Y = the starting corners.
-	#
 
 	X = 0 - int( math.floor( Sprinkler.shape[0]/2 ) )
 	Y = 0 - int( math.floor( Sprinkler.shape[1]/2 ) )
-	#  print (4 * MaxDist), CurrX, SprinklerSpace, SprinklerNum
 	for x in range(0,SprinklerNum):
 		Y = 0 -  int( math.ceil( Sprinkler.shape[0] )/2 )
 		for y in range(0,SprinklerNum):
-			#  SprinklerPos[x,y,0]=X
-			#  SprinklerPos[x,y,1]=Y
 			AddArray2D(AllSprinklers,Sprinkler,X,Y)
-			#  print X, Y, x, y
 			Y=Y+SprinklerY
 		X=X + SprinklerX
 	
