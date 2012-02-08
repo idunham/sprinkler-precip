@@ -12,6 +12,8 @@ from scipy import interpolate
 import math
 import matplotlib.pyplot as plt
 import csv
+import tkFileDialog as tkf
+from Tkinter import *
 
 
 def AddArray2D(Target,From,CornerX=0,CornerY=0):
@@ -82,53 +84,64 @@ def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 			Sprinkler[(MaxDist+x,MaxDist+y)] = CellPrecip
 			Sprinkler[(MaxDist-x,MaxDist+y)] = CellPrecip
 
+def getCSV(mode='rb'):
+	root = Tk()
+	root.withdraw()
+	file_opt = options = {}
+	options['filetypes'] = [('All files', '.*'), ('CSV data', '.csv')]
+	datacsv = tkf.askopenfile(mode=mode, parent=root, **file_opt)
+	root.destroy()
+	dialect = csv.Sniffer().sniff(datacsv.read(1024))
+	datacsv.seek(0)
+	Data=csv.reader(datacsv,dialect)
+	SprinklerDist = array(Data.next())
+	SprinklerData = array(Data.next())
+	MoreData = array(Data.next())
+	datacsv.close()
+	return (SprinklerDist,SprinklerData,MoreData)
 
+if __name__=='__main__':
+	Profile=getCSV('rb')
+	SprinklerDist = Profile[0]
+	SprinklerData = Profile[1]
+	MoreData = Profile[2]
 
-#SprinklerDist = array([2,4,6,8,10,12])
-#SprinklerData = array( [0.873,1.137,1.137,.773,.209,0])
+	MaxDist       = int(math.ceil(float(SprinklerDist[SprinklerDist.shape[0]-1])))
 
-datacsv=open('data.csv',"rb")
-dialect = csv.Sniffer().sniff(datacsv.read(1024))
-datacsv.seek(0)
-Data=csv.reader(datacsv,dialect)
-SprinklerDist = array(Data.next())
-SprinklerData = array(Data.next())
-MoreData = array(Data.next())
-datacsv.close()
+	Sprinkler = zeros( ((2*MaxDist+1),(2*MaxDist+1)) )
+	SprinklerX= int(float(MoreData[0]))
+	SprinklerY= int(float(MoreData[1]))
+	PlotX     = 1 + 3 * SprinklerX
+	PlotY     = 1 + 3 * SprinklerY
 
-MaxDist       = int(math.ceil(eval(SprinklerDist[SprinklerDist.shape[0]-1])))
+	SprinklerPrecip=interpolate.splrep(SprinklerDist,SprinklerData)
+	MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist)
 
-Sprinkler = zeros( ((2*MaxDist+1),(2*MaxDist+1)) )
-SprinklerSpace= int(eval(MoreData[0]))
+	# Now to add the sprinkler maps up correctly...
+	AllSprinklers=zeros( (PlotX,PlotY))
 
-SprinklerPrecip=interpolate.splrep(SprinklerDist,SprinklerData)
-MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist)
+	
+	SprinklerNum=int(4)
+	# Fill block of sprinkler positions
+	# Basic theory:
+	# Sprinkler.shape=(2*MaxDist+1,2*MaxDist+1)
+	# Sprinkler[ceil(Breadth)]  is the center.
+	# Sprinkler[1,1] is the corner of the data, but we'll use [0,0]
+	# We need X & Y = the starting corners.
+	#
 
-# Now to add the sprinkler maps up correctly...
-AllSprinklers=zeros( (MaxDist * 4 + 1, MaxDist * 4 + 1))
-
-CurrX = int(MaxDist + 1 - SprinklerSpace*(math.floor( (MaxDist+1)/SprinklerSpace)/2 ))
-CurrY = CurrX
-SprinklerNum=int( math.ceil( (4 * MaxDist + 1 - CurrX)/SprinklerSpace ) )
-# Fill block of sprinkler positions
-# Basic theory:
-# Sprinkler.shape=(2*MaxDist+1,2*MaxDist+1)
-# Sprinkler[ceil(Breadth)]  is the center.
-# Sprinkler[1,1] is the corner of the data, but we'll use [0,0]
-# We need X & Y = the starting corners.
-#
-
-X = CurrX - int( math.ceil(Sprinkler.shape[0])/2 )
-#  print (4 * MaxDist), CurrX, SprinklerSpace, SprinklerNum
-for x in range(0,SprinklerNum):
-	Y = CurrY -  int( math.ceil( Sprinkler.shape[0] )/2 )
-	for y in range(0,SprinklerNum):
-		#  SprinklerPos[x,y,0]=X
-		#  SprinklerPos[x,y,1]=Y
-		AddArray2D(AllSprinklers,Sprinkler,X,Y)
-		#  print X, Y, x, y
-		Y=Y+SprinklerSpace
-	X=X+SprinklerSpace
-
-PlotSprinkler(AllSprinklers)
+	X = 0 - int( math.floor( Sprinkler.shape[0]/2 ) )
+	Y = 0 - int( math.floor( Sprinkler.shape[1]/2 ) )
+	#  print (4 * MaxDist), CurrX, SprinklerSpace, SprinklerNum
+	for x in range(0,SprinklerNum):
+		Y = 0 -  int( math.ceil( Sprinkler.shape[0] )/2 )
+		for y in range(0,SprinklerNum):
+			#  SprinklerPos[x,y,0]=X
+			#  SprinklerPos[x,y,1]=Y
+			AddArray2D(AllSprinklers,Sprinkler,X,Y)
+			#  print X, Y, x, y
+			Y=Y+SprinklerY
+		X=X + SprinklerX
+	
+	PlotSprinkler(AllSprinklers[SprinklerX:2*SprinklerX+1,SprinklerY:2*SprinklerY+1])
 

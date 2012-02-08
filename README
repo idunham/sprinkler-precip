@@ -15,9 +15,30 @@ software.  Additionally, I understand the advantages of FOSS in terms of
 practical utility.
 
 I hope to implement a free replacement for SPACE.  
-It will probably get written in Python + NumPy, because it seems easy to me,
-I understand Python better than anything else, and because NumPy appears to
-handle the arrays I'll use decently.
+It will be written in Python + NumPy, because it seems easy to me,
+I understand Python better than anything else, and because NumPy 
+handles the arrays I'm using pretty well.
+
+LICENSE:
+    Copyright (C) 2012 Isaac Dunham <idunham@mail.csuchico.edu)
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+Alternatively, as provided by the terms of the LGPL, you may use the GPL
+(either version 2, or, at your option, any later version).
+Please contact the author if none of these options are suitable for you.
 
 ROADMAP
 0.0*:
@@ -48,7 +69,21 @@ Pseudocode has been written (see doc/overview).
 0.11 implemented: scipy interpolation (makes catchment data more flexible)
 0.12 implemented: Use CSV files (currently hardcoded to "data.csv")
 
+0.20 implemented: Use tkFileDialog & Tkinter for a file selection dialog (instead of data.csv)
+	  -Tkinter is needed for a hackaround to Tk's limitations
+	(dialogs cannot be destroyed, so must create a window,
+	run the dialog as its child, and destroy the parent window)
+0.21 implemented: Rectangular spacing
+		  Window choice fixes 
+		   (will allow calculating application rate stats)
+
 TODO:
-0.2x:	Use Tkinter for a file selection dialog
-	Rectangular spacing
+0.2x-0.3x:	Calculate CU, DU, average rate
+	Add label support to PlotSprinkler
 	Staggered spacing?
+	Use PRF format from SPACE?
+	-Will require entry of parameters like spacing;
+	pressure must be considered in the PRF dialogs
+	Main window (will pass root window as parameter to file selection dialogs)
+	Write-out statistics (and perhaps a spreadsheet of data...)?
+
