@@ -1,0 +1,111 @@
+From: "Joe Oliphant" 
+To: "Isaac Dunham" 
+Subject: Re: Request for information on irrigation data format
+Date: Thu, 9 Feb 2012 08:29:56 -0800
+
+
+The program was developed almost 25 years ago so for various reasons, it's 
+kind of goofy.  They are random length files of 500 characters for each 
+record.  If you're familiar with Visual Basic, you should understand the 
+code below.  If not, let me know.
+
+-Joe
+
+The type def is below.  DL1 through DL19 are comma delimiters.  The 
+catchment data is 61 five character strings of four characters representing 
+the catchment data and a comma.  All the data is in ASCII strings.
+The profile type is as follows:
+
+1 = Standard profile in English units.
+
+2 = Standard Profile in Metric units
+
+4 = Special catchment spacing with English units
+
+5 = Special catchment spacing with Metric units
+
+Catchment data for types 1 and four are stored multiplied by 1000 and 2 and 
+5 by 10.  They are the raw data so you need to use the test duration to 
+convert them to inches per hour.  For profiles of type 4 or 5, you need to 
+use this function to convert the catchment spacing:
+
+Function CVS!(param$)
+    Dim L%, M%
+
+    M = Asc(Left(param, 1))
+    L = Asc(Right(param, 1))
+    CVS = (M * 256 + L) / 100
+End Function
+
+ Here is the Type Definition:
+
+
+    Type Profile
+        Testf As String * 20 ' Test Facility
+        DL1 As String * 1
+        Dat As String * 8    ' Test Date
+        DL2 As String * 1
+        Tim As String * 5    ' Test Time
+        DL3 As String * 1
+        Spr As String * 20   ' Sprinkler Name
+        DL4 As String * 1
+        Ser As String * 5    ' Sprinkler Model
+        DL5 As String * 1
+        Noz As String * 20   ' Sprinkler Nozzle
+        DL6 As String * 1
+        Pre As String * 9    ' Base Pressure (PSI)
+        DL7 As String * 1
+        Ris As String * 4    ' Riser Height (Inches)
+        DL8 As String * 1
+        Flo As String * 7    ' Flow Rate (GPM)
+        DL9 As String * 1
+        Set As String * 2    ' Catchment Spacing
+        DL10 As String * 1
+        R As String * 4      ' Radius of Throw
+        DL11 As String * 1
+        Arc As String * 4    ' Sprinkler Arc
+        DL12 As String * 1
+        Mrev As String * 4   ' Minutes per Revolution
+        DL13 As String * 1
+        Setsc As String * 4  ' Set Screw Setting
+        DL14 As String * 1
+        Sele As String * 10  ' Record Number
+        DL15 As String * 1
+        Dur As String * 4    ' Test Duration
+        DL16 As String * 1
+        Comm As String * 40  ' Comment
+        DL17 As String * 1
+        Prof As String * 2   ' Profile Type
+        DL18 As String * 1
+        Ccnt As String * 3   ' Catchment Count
+        DL19 As String * 1
+        N As String * 305    ' Catchment data
+        BCC As String * 1    ' Block Check
+    End Type
+
+
+
+
+
+----- Original Message ----- 
+From: "Isaac Dunham" 
+To: "Joe C. Oliphant" 
+Sent: Wednesday, February 08, 2012 5:43 PM
+Subject: Request for information on irrigation data format
+
+
+>
+> Mr. Oliphant:
+> Would you be able to provide details on the .PRF file format used by
+> SPACE-Pro, Hyper-SPACE, and other CIT software?
+>
+> I am currently working on some basic irrigation software for computers not
+> running Microsoft Windows.  While it currently processes user-observed 
+> data,
+> I anticipate that pre-measured data would be preferable to most users.
+> I mentioned the project to Dr. Spiess, and he recommended contacting you
+> for information on this format.
+>
+> Thank you for your time.
+> Isaac Dunham 
+
