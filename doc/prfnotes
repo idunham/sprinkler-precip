@@ -10,17 +10,15 @@ General design of PRF support:
  -Pressure can serve as a key
 
 Little points:
-The csv module is a good starting point for API
 Use a filehandle [caller open()s the file with mode rb]
-Initial call should return an object; one property will be the pressurelist
-Call a method with a pressure as parameter to get anything else...
-Or should pressures be indexed by a key?
-radius should probably be a list too, though (to allow checking what radii
-are available)
+Store data in a table!
 
-Some sample code (to illustrate the proposed api):
-example = prf.init(open('somefile.prf',mode='rb'),units=english)
-pressure = example.pressures[0]
-catchmentspacing = example.spacing(pressure)
-precipdata = example.precip(pressure=pressure)
+Proposed API (roughly)
+prffile=open('SOMEFILE.PRF',mode='rb')
+prftarget=numpy.zeros(....)
+while ERR==0
+	try:
+		ERR=prf.read(prffile,prftarget)
+	except:	#End of file--read error
+		break
 
