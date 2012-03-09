@@ -71,8 +71,6 @@ def PlotSprinkler(Sprinkler):
 	plt.colorbar()
 	plt.show()
 
-
-
 def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 	for x in range(0,(MaxDist+1)):
 		for y in range(0,(MaxDist+1)):
