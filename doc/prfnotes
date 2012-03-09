@@ -1,0 +1,26 @@
+General design of PRF support:
+
+1.  Make it as a separate module
+2.  Read support first, write support second
+3.  Present data in english or metric units
+ -convert on the fly
+ -API may pass spacing (preferred) or use interpolation to provide a model
+ -MUST support custom spacing
+4.  API must extract a list/array of valid pressures
+ -Pressure can serve as a key
+
+Little points:
+The csv module is a good starting point for API
+Use a filehandle [caller open()s the file with mode rb]
+Initial call should return an object; one property will be the pressurelist
+Call a method with a pressure as parameter to get anything else...
+Or should pressures be indexed by a key?
+radius should probably be a list too, though (to allow checking what radii
+are available)
+
+Some sample code (to illustrate the proposed api):
+example = prf.init(open('somefile.prf',mode='rb'),units=english)
+pressure = example.pressures[0]
+catchmentspacing = example.spacing(pressure)
+precipdata = example.precip(pressure=pressure)
+
