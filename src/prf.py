@@ -51,13 +51,13 @@ def readprf(File):
 	finally:
 		return parr
 
-def parsedata(Type,DataString):
-	'''parsedata(Type,String)->1-d array of numbers
+def parsedata(Type,DataString,As):
+	'''parsedata(Type,String,As)->1-d array of catchment readings
 	There's a 305-byte string containing about 61 readings.
 	This should return those readings.
 	In order to make it meaningful, we need the format selector 
 	(which should be 1-5, if I remember right).
-	The format selector tells whether we need to transform the data.
+	The format selectors tell whether we need to transform the data.
 	'''
 	pass
 
