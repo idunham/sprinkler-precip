@@ -35,7 +35,7 @@ def prfline(prf):
 			l[94:98],l[99:106],l[107:109],l[110:113],l[115:119],
 			l[120:124],l[125:129],l[130:140],l[141:145],l[146:186],
 			int(l[187:189]),int(l[190:193]),
-			l[194:499]]
+			l[193:499]]
 	return larray
 
 def readprf(File):
@@ -59,6 +59,15 @@ def parsedata(Type,DataString,As):
 	(which should be 1-5, if I remember right).
 	The format selectors tell whether we need to transform the data.
 	'''
-	pass
-
+	# There are 61 fields; the first is 3 chars + \r
+	# The rest are 4 chars + \r
+	# We need to start at the right index (DataString[3], usually)
+	# If \r is not found, error! The file isn't a valid PRF.	
+	start=DataString.index('\r')
+	DataList=np.zeros(61)
+	DataList[0]=float(DataString[0:start])
+	for i in range(60):
+		DataList[i]=float(DataString[start+1+(5*i):start+5*(i+1)])
+	
+	return DataList
 
