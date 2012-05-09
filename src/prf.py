@@ -38,6 +38,10 @@ def prfline(prf):
 			l[194:499]]
 	return larray
 
+def spacing(type,spacing):
+	'''If type'''
+	pass
+
 def readprf(File):
 	'''readprf(File) -> 2-d array of strings'''
 	parr=np.zeros((20,0),dtype='|S305')
@@ -51,14 +55,34 @@ def readprf(File):
 	finally:
 		return parr
 
-def parsedata(Type,DataString,As):
-	'''parsedata(Type,String,As)->1-d array of catchment readings
+def parsedata(Type,DataString,As=0,min=60):
+	'''parsedata(Type,String,As=0,min=60)->1-d array of catchment readings
 	There's a 305-byte string containing about 61 readings.
 	This should return those readings.
 	In order to make it meaningful, we need the format selector 
 	(which should be 1-5, if I remember right).
 	The format selectors tell whether we need to transform the data.
+	We also need the number of minutess, so we can get a rate/hr
 	'''
-	pass
-
+	# There are 61 fields; the first is 3 chars + \r
+	# The rest are 4 chars + \r
+	# We need to start at the right index (DataString[3], usually)
+	# If \r is not found, error! The file isn't a valid PRF.	
+	start=DataString.index('\r')
+	DataList=np.zeros(61)
+	DataList[0]=float(DataString[0:start])
+	if (As==1):		# Output As metric
+		c2out=1		#Convert from cm
+		i2out=2.54	#Convert from inches
+	else: 			# Not as metric
+		c2out=(1/2.54)
+		i2out=1
+	for i in range(60):
+		DataList[i+1]=float(DataString[start+1+(5*i):start+5*(i+1)])
+	if (Type==2) or (Type==5):	# millimeters*10 in
+		DataList=DataList*c2out*60/(100*min)
+	else:		# inches*1000 in; Type == 1 | 3 | 4
+		DataList=DataList*i2out*60/(1000*min)
+		
+	return DataList
 

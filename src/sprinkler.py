@@ -74,13 +74,12 @@ def PlotSprinkler(Sprinkler):
 def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 	for x in range(0,(MaxDist+1)):
 		for y in range(0,(MaxDist+1)):
-			# We'll allow mapping onto a filled map
 			r=(x**2 + y**2)**.5
 			CellPrecip = Interpolate(r,SprinklerPrecip,MaxDist)
-		 	Sprinkler[(MaxDist-x,MaxDist-y)] = CellPrecip
-			Sprinkler[(MaxDist+x,MaxDist-y)] = CellPrecip
-			Sprinkler[(MaxDist+x,MaxDist+y)] = CellPrecip
-			Sprinkler[(MaxDist-x,MaxDist+y)] = CellPrecip
+		 	Sprinkler[(MaxDist-x-1,MaxDist-y-1)] = CellPrecip
+			Sprinkler[(MaxDist+x-1,MaxDist-y-1)] = CellPrecip
+			Sprinkler[(MaxDist+x-1,MaxDist+y-1)] = CellPrecip
+			Sprinkler[(MaxDist-x-1,MaxDist+y-1)] = CellPrecip
 
 def getCSV(mode='rb'):
 	root = Tk()
