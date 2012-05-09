@@ -86,7 +86,7 @@ def getCSV(mode='rb'):
 	root = Tk()
 	root.withdraw()
 	file_opt = options = {}
-	options['filetypes'] = [('All files', '.*'), ('CSV data', '.csv')]
+	options['filetypes'] = [('All files', '.*'), ('CSV data', ('.csv','.CSV'))]
 	datacsv = tkf.askopenfile(mode=mode, parent=root, **file_opt)
 	root.destroy()
 	dialect = csv.Sniffer().sniff(datacsv.read(1024))

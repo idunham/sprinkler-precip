@@ -83,18 +83,22 @@ def MapSprinkler(Sprinkler,SprinklerPrecip,MaxDist):
 			Sprinkler[(MaxDist+x,MaxDist+y)] = CellPrecip
 			Sprinkler[(MaxDist-x,MaxDist+y)] = CellPrecip
 
-def getPRF(mode='rb'):
-	root = Tk()
-	root.withdraw()
+def getPRF(root,mode='rb'):
 	file_opt = options = {}
 	options['filetypes'] = [('SPACE profiles', ('.prf','.PRF')), ('All files', '.*')]
 	thisprf = tkf.askopenfile(mode=mode, parent=root, **file_opt)
-	root.destroy()
 	prfdata=prf.readprf(thisprf)
 	thisprf.close()
 	return prfdata
-	#return (SprinklerDist,SprinklerData,MoreData)
 
+def prfdialog():
+	root = Tk()
+	root.withdraw()
+	prfdata=getPRF(root,mode='rb')
+	#TODO: Implement a dialog choosing the specifications to use
+	#Convert data to an interpolated structure
+	root.destroy()
+	pass
 
 def getCSV(mode='rb'):
 	root = Tk()
