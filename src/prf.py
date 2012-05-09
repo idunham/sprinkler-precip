@@ -31,11 +31,14 @@ def prfline(prf):
 	l	=prf.read(500)
 	# Here I must apologize for the mess.
 	# This assigns all values in one pass.
-	larray	=[l[0:20],l[21:28],l[30:34],l[36:55],l[57:62],l[63:82],l[84:92],
-			l[94:98],l[99:106],l[107:109],l[110:113],l[115:119],
-			l[120:124],l[125:129],l[130:140],l[141:145],l[146:186],
-			int(l[187:189]),int(l[190:193]),
-			l[194:499]]
+	larray	=[l[0:20],l[21:28],l[30:34], #Test information
+		l[36:55],l[57:62],l[63:82],  #The sprinkler
+		l[84:92],l[94:98],l[99:106], #Pressure, riser, flow
+		l[107:109],l[110:113],l[115:119], #spacing, radius, arc, min/rev
+		l[120:124],l[125:129],l[130:140], #set screw, record, duration
+		l[141:145],l[146:186], # __, comment
+		int(l[187:189]),int(l[190:193]), #profile type, catchment count
+		parsedata( int(l[187:189]), l[194:499], min=float(l[130:140]) ) ]
 	return larray
 
 def spacing(type,spacing):
