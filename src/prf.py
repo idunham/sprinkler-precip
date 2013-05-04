@@ -63,9 +63,9 @@ def parsedata(Type,DataString,As=0,min=60):
 	There's a 305-byte string containing about 61 readings.
 	This should return those readings.
 	In order to make it meaningful, we need the format selector 
-	(which should be 1-5, if I remember right).
+	(which should be 1-5, indicating English or metric units).
 	The format selectors tell whether we need to transform the data.
-	We also need the number of minutess, so we can get a rate/hr
+	We also need the number of minutes, so we can get a rate/hr
 	'''
 	# There are 61 fields; the first is 3 chars + \r
 	# The rest are 4 chars + \r
