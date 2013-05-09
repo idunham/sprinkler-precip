@@ -16,6 +16,8 @@ import csv
 import math
 import prf
 
+def cancel():
+	raise SystemExit
 
 def AddArray2D(Target,From,CornerX=0,CornerY=0):
 	TgtX=Target.shape[0]
@@ -103,13 +105,23 @@ def prfdialog():
 		row[7]+'X'+row[6]+'PSI@'+row[8]+'GPM')
 	
 	listbox=Listbox(root, width=60, height=5)
+	listbox.pack()
 	for entry in SPRINKLERSEL
 		listbox.insert(END, entry)
 	# And a number-entry field or two...
 	# We need row x distance. 
+	# These correspond to "MoreData", the third row in the CSV format.
+	wide=Entry(root)
+	height=Entry(root)
+	wide.pack()
+	height.pack()
+	
+	# Callback that will read everything at the end.
+	def plot():
+		Dimensions=[int(height.get()),int(wide.get())]
 
 	# And two buttons: plot, and cancel
-
+	
 	#TODO: Convert data to an interpolated structure
 	#row=SPRINKLERSEL.index(userentry)
 	root.destroy()
