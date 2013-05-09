@@ -95,8 +95,23 @@ def prfdialog():
 	root = Tk()
 	root.withdraw()
 	prfdata=getPRF(root,mode='rb')
-	#TODO: Implement a dialog choosing the specifications to use
-	#Convert data to an interpolated structure
+	root.withdraw()
+	SPRINKLERSEL = []
+	for row in prfdata:
+		SPRINKLERSEL.append(row[3]+row[4]+', ' +
+		row[5]+'@'+row[12]+'X'+
+		row[7]+'X'+row[6]+'PSI@'+row[8]+'GPM')
+	
+	listbox=Listbox(root, width=60, height=5)
+	for entry in SPRINKLERSEL
+		listbox.insert(END, entry)
+	# And a number-entry field or two...
+	# We need row x distance. 
+
+	# And two buttons: plot, and cancel
+
+	#TODO: Convert data to an interpolated structure
+	#row=SPRINKLERSEL.index(userentry)
 	root.destroy()
 	pass
 
